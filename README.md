@@ -23,7 +23,9 @@ The GitHub repository has an example app that should demonstrate of all the supp
 
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks. To integrate iOS eSIM Framework into your Xcode project using Carthage, specify it in your Cartfile:
 
+```Swift
 github "amdocs-iot-mobile/esim-binary-sdk-ios" ~> 1.0
+```
 
 ## LPA (Local Profile Assistant)
 
