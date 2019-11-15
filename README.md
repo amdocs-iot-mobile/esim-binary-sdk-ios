@@ -14,106 +14,41 @@ An iOS eSIM Framework that allow downloading and installing a carrier eSIM.
 * Download progress percentage.
 * Progress bar UI element.
 
-# Getting Started
-The GitHub repository has an example app that should demonstrate of all the supported features of the SDK. Please check the example for more detailed code samples. The following samples will demonstrate all functionalities.
-
 # Installation
 
 ## Carthage
 
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks. To integrate iOS eSIM Framework into your Xcode project using Carthage, specify it in your Cartfile:
 
+### GitHub Repository
+
+GitHub repositories (both GitHub.com and GitHub Enterprise) are specified with the github keyword:
+
 ```Swift
 github "amdocs-iot-mobile/esim-binary-sdk-ios" ~> 1.0
 ```
 
-## LPA (Local Profile Assistant)
+### Binary only framework
 
-The first step is to create a new instance of the LPA manager class.
+Compiled binary .framework are specified with the binary keyword and as an https:// URL, a file:// URL, or a relative or an absolute path with no scheme, that returns a binary project specification:
 
 ```Swift
-  let lpa = LpaManager()
+binary "https://de.streamezzo.com/esim/Files/sdk/ios/esim_sdk_ios.json"
 ```
 
-If we want to know if the device support eSIM or not, we should call isESimSupported function.
+### Binary Project Specification
 
-```Swift
-  if (lpa.isESimSupported()) {
-    print("> eSIM supported")
-  } else {
-    print("> eSIM not supported")
-  }
-```
+A binary project specification can be used to list the locations and versions of compiled frameworks. This data must be available via https and could be served from a static file or dynamically.
 
-Initiates the download subscription process.
+* The JSON specification file name should have the same name as the framework and not be named Carthage.json, (example: MyFramework.json).
+* The JSON structure is a top-level dictionary with the key-value pairs of version / location.
+* The version must be a semantic version. Git branches, tags and commits are not valid.
+* The location must be an https url.
 
-```Swift
-  lpa.downloadSubscription(activationCode: "code") { result in
-    
-    print(result.rawValue)
-    
-    switch result {
-      
-      case .fail:
-        print("- fail")
-      case .success:
-        print("- success")
-      case .unknown:
-        print("- unknown")
-      default:
-        print("- default")
-        }
-  }
-```
+#### Example binary project specification
 
-## Orchestrator
-
-The first step is to create a new instance of the Orchestrator class.
-
-```Swift
-  let orchestratorManager = OrchestratorManager(baseUrl: "url")
-```
-
-Sign in with given credentials
-
-```Swift
-  orchestratorManager.signIn(userName: "userName", password: "password") { (orchestratorResponse) in
-    
-    switch orchestratorResponse.successCode {
-      
-      case ResponseCode.SUCCESS_CODE_SUCCESS:
-        print("signIn success: ", orchestratorResponse.successCode)
-      default:
-        print("signIn failure: ", orchestratorResponse.successCode)
-        print("signIn error: ", orchestratorResponse.error ?? "N/A")
-        }
-  }
-```
-
-Check if the profile is ready to be download or not
-
-```Swift
-  
-  orchestratorManager.isIccidReady(iccid: "iccid", completion: { (isIccidReadyResponse) in
-    
-    if let iccidReady = isIccidReadyResponse.iccidReady {
-      print("- isIccidReady: \(iccidReady)")
-    }
-  })
-```
-
-Download the given profile
-
-```Swift
-
-  orchestratorManager.submitOrder(completion: { (orchestratorResponse) in
-  
-    switch orchestratorResponse.successCode {
-    
-      case ResponseCode.SUCCESS_CODE_SUCCESS:
-        print("- submitOrder SUCCESS")
-      default:
-        print("- submitOrder FAILURE")
-      }
-  })
+```Json
+{
+	"1.0.0": "https://de.streamezzo.com/esim/Files/sdk/ios/esim_sdk_ios.framework.zip"
+}
 ```
